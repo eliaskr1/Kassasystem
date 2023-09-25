@@ -2,13 +2,13 @@ import pickle
 import tobiasclass
 
 # Laddar objekt sparade i picklesave.txt
-with open("picklesave.txt", "rb") as f:
-    try:
+try:
+    with open("picklesave.txt", "rb") as f:
         lst_varor = pickle.load(f)
-    except EOFError:
-        lst_varor = []
-    except FileNotFoundError:
-        lst_varor = []
+except EOFError:
+    lst_varor = []
+except FileNotFoundError:
+    lst_varor = []
 
 
 # metod för att lägga till en ny vara
