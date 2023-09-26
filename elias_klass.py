@@ -35,7 +35,7 @@ class vara:
         if found == True:
             print(sku, "har ändrats.")
         else:
-            print(sku, "är inte en giltig varukood")
+            print(sku, "är inte en giltig varukod.")
 
 class Order(list):
     '''
