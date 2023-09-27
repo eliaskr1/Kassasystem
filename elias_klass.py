@@ -1,15 +1,41 @@
 class vara:
     # Specifierade 'float' för pris så att man inte försökte räkna ut med
     # sträng eller dylikt
-    def __init__(self, namn, varukod, pris: float):
+    def __init__(self, namn, varukod, pris: int):
         self.namn = namn
         self.varukod = varukod
         self.pris = pris
+
+    def getvarukod(self):
+        return self.varukod
 
     def __str__(self):
         # Ändrade utskriften för att snygga till utskriften av ordern
         return f" ({self.varukod}) {self.namn}: {self.pris} kr"
 
+    def modify_vara(lst_varor):
+        '''Ändrar namn och pris på "vara" objekt i angiven lista med varor
+        args: lista med objekt av typen vara
+        '''
+        found = False # För att felhantera felaktig varukod
+        sku = input("Ange varukod på vara du vill ändra > ").upper()
+        for i in lst_varor:
+            if sku == i.getvarukod():
+                found = True
+                nytt_namn = input("Ange nytt namn till varan > ")
+                i.namn = nytt_namn
+                while True: # För att felhantera omvandling av pris till int
+                    try:
+                        nytt_pris_str = input("Ange nytt pris till vara > ")
+                        nytt_pris = int(nytt_pris_str)
+                        i.pris = nytt_pris
+                        break  # Bryt loopen om omvandlingen till int lyckades
+                    except ValueError:
+                        print(nytt_pris_str, "är inte ett giltigt pris. Försök igen.")
+        if found == True:
+            print(sku, "har ändrats.")
+        else:
+            print(sku, "är inte en giltig varukod.")
 
 class Order(list):
     '''
