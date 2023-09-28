@@ -92,6 +92,8 @@ class Order(list):
     för en lista med objekt av typen Vara.
     args: lista med varor, lista som ordern sparas i.
     '''
+
+
     def __init__(self, varor: list, lst_orders):
         self.order_no = len(lst_orders)
         self.varor = varor
@@ -104,7 +106,26 @@ class Order(list):
             order_info += str(Vara) + "\n"
         order_info += f"Pris: {self.tot_pris} kr"
         return order_info
-    
+
+    def register_items(lst_varor, lst_order):
+        reg_items = []  # tom lista för att spara aktuellt köp
+        # evighetsloop tar en inmatning i taget istället för en hel order på samma gång.
+        while True:
+            item = input("Registrera varukod / Q för huvudmenyn: ").upper()
+            if item != "Q":
+                for vara in lst_varor:
+                    if vara.varukod == item:
+                        # utskrift av varan så att det är rätt
+                        print(vara)
+                        # spara till lista
+                        reg_items.append(vara)
+
+            else:
+                if len(reg_items) != 0:  # förhindrar att tom order skapas
+                    order = Order(reg_items)
+                    lst_order.append(order)
+                    print(order)
+
     def load_orders(lst_orders, pkl_file):
         '''Laddar ner sparade ordrar från angiven
         pickle fil till angiven lista.
