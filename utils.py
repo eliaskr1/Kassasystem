@@ -76,6 +76,7 @@ class Vara:
             lst_varor = []
         except FileNotFoundError:
             lst_varor = []
+        return lst_varor
         
     def save_varor(lst_varor, pkl_file):
         '''Sparar lista med objekt av typen Vara
@@ -130,6 +131,8 @@ class Order(list):
                     order = Order(reg_items)
                     lst_order.append(order)
                     print(order)
+                else:
+                    break
 
     def load_orders(lst_orders, pkl_file):
         '''Laddar ner sparade ordrar från angiven
@@ -142,6 +145,7 @@ class Order(list):
             lst_orders = []
         except FileNotFoundError:
             lst_orders = []
+        return lst_orders
     
     def save_orders(lst_orders, pkl_file):
         '''Sparar ner angiven lista med ordrar till
