@@ -1,6 +1,8 @@
 import pickle
 class Vara:
     def __init__(self, namn, varukod, pris: int):
+        if pris < 0 or pris > 9999:
+            raise ValueError("Priset kan inte vara negativt.")
         self.namn = namn
         self.varukod = varukod
         self.pris = pris
@@ -20,36 +22,12 @@ class Vara:
         while True:
             try:
                 pris = int(input("Ange pris på varan: "))
+                ny_vara = Vara(namn, varukod, pris)
                 break
             except ValueError:
                 print(pris, "är inte ett giltigt pris. Försök igen.")
-        ny_vara = Vara(namn, varukod, pris)
         lst_varor.append(ny_vara)
         print(ny_vara.namn, "tillagd.")
-
-    def modify_vara(lst_varor):
-        '''Ändrar namn och pris på "Vara" objekt i angiven lista med varor
-        args: lista med objekt av typen Vara
-        '''
-        found = False # För att felhantera felaktig varukod
-        sku = input("Ange varukod på Vara du vill ändra > ").upper()
-        for i in lst_varor:
-            if sku == i.getvarukod():
-                found = True
-                nytt_namn = input("Ange nytt namn till varan > ")
-                i.namn = nytt_namn
-                while True: # För att felhantera omvandling av pris till int
-                    try:
-                        nytt_pris_str = input("Ange nytt pris till Vara > ")
-                        nytt_pris = int(nytt_pris_str)
-                        i.pris = nytt_pris
-                        break  # Bryt loopen om omvandlingen till int lyckades
-                    except ValueError:
-                        print(nytt_pris_str, "är inte ett giltigt pris. Försök igen.")
-        if found == True:
-            print(sku, "har ändrats.")
-        else:
-            print(sku, "är inte en giltig varukod.")
         
     def delete_vara(lst_varor):
         x = -1
@@ -128,11 +106,13 @@ class Order(list):
 
             else:
                 if len(reg_items) != 0:  # förhindrar att tom order skapas
-                    order = Order(reg_items)
+                    order = Order(reg_items, lst_order)
                     lst_order.append(order)
                     print(order)
-                else:
+                    input("") # Pausar för utskrift av kvitto.
                     break
+                else:
+                    break # Förhindrar evighetsloop om man inte har några varor att sälja
 
     def load_orders(lst_orders, pkl_file):
         '''Laddar ner sparade ordrar från angiven
