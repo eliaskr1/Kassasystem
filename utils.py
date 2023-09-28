@@ -1,9 +1,8 @@
 import pickle
 class Vara:
     def __init__(self, namn, varukod, pris: int):
-        if len(namn) > 20:
-            raise ValueError("Namnet är för långt. Max gräns 20.")
-
+        if pris < 0 or pris > 9999:
+            raise ValueError("Priset kan inte vara negativt.")
         self.namn = namn
         self.varukod = varukod
         self.pris = pris
@@ -29,6 +28,8 @@ class Vara:
         while True:
             try:
                 pris = int(input("Ange pris på varan: "))
+                ny_vara = Vara(namn, varukod, pris)
+                break
             except ValueError:
                 print(f"{pris} är inte ett giltigt pris. Försök igen.")
             if pris < 0 or pris > 9999:
@@ -149,12 +150,16 @@ class Order(list):
                         print(vara)
                         # spara till lista
                         reg_items.append(vara)
-            elif len(reg_items) != 0:  # förhindrar att tom order skapas
-                order = Order(reg_items)
-                lst_order.append(order)
-                print(order)
+
             else:
-                break
+                if len(reg_items) != 0:  # förhindrar att tom order skapas
+                    order = Order(reg_items, lst_order)
+                    lst_order.append(order)
+                    print(order)
+                    input("") # Pausar för utskrift av kvitto.
+                    break
+                else:
+                    break # Förhindrar evighetsloop om man inte har några varor att sälja
 
     def load_orders(lst_orders, pkl_file):
         '''Laddar ner sparade ordrar från angiven
@@ -194,3 +199,5 @@ class Order(list):
 
 
 
+
+# Branch test
