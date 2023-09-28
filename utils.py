@@ -30,7 +30,7 @@ class Vara:
             try:
                 pris = int(input("Ange pris på varan: "))
             except ValueError:
-                print(pris, "är inte ett giltigt pris. Försök igen.")
+                print(f"{pris} är inte ett giltigt pris. Försök igen.")
             if pris < 0 or pris > 9999:
                 print(pris, "är inte ett giltigt pris. Försök igen.")
             else:
@@ -72,7 +72,7 @@ class Vara:
     def delete_vara(lst_varor):
         found = False  # För att felhantera felaktig varukod
         while not found:
-            sku = input("Ange varukod på Vara du vill ta bort eller ange 0 för att återgå till menyn > ").upper()
+            sku = input("Ange varukod på vara du vill ta bort eller ange 0 för att återgå till menyn > ").upper()
             if sku == "0":
                 break  # Avsluta och återgå till menyn om användaren anger 0
             for i in lst_varor:
