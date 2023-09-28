@@ -15,14 +15,24 @@ class Vara:
         '''Skapar nytt objekt av typen Vara och
         lägger till i angiven lista.
         args: lista'''
-        namn = input("Ange namn på varan: ")
-        varukod = input("Ange varukod på varan: ").upper()
+        maxlength = 23
+        while True:
+            namn = input("Ange namn på varan: ")
+            varukod = input("Ange varukod på varan: ").upper()
+            if len(namn) >= maxlength or len(varukod) >= maxlength:
+                print(f"Namn får inte vara längre än {maxlength} tecken")
+            else:
+                break
         while True:
             try:
                 pris = int(input("Ange pris på varan: "))
-                break
             except ValueError:
                 print(pris, "är inte ett giltigt pris. Försök igen.")
+            if pris < 0 or pris > 9999:
+                print(pris, "är inte ett giltigt pris. Försök igen.")
+            else:
+                break
+
         ny_vara = Vara(namn, varukod, pris)
         lst_varor.append(ny_vara)
         print(ny_vara.namn, "tillagd.")
@@ -94,7 +104,6 @@ class Order(list):
     args: lista med varor, lista som ordern sparas i.
     '''
 
-
     def __init__(self, varor: list, lst_orders):
         self.order_no = len(lst_orders)
         self.varor = varor
@@ -117,7 +126,13 @@ class Order(list):
         reg_items = []  # tom lista för att spara aktuellt köp
         # evighetsloop tar en inmatning i taget istället för en hel order på samma gång.
         while True:
+            if len(lst_varor) == 0:
+                # Undantagsfall ifall menynskulle vara helt tom fastnar i en loop annars
+                input("Det finns inga varor att lägga till, tryck varsomhelst "
+                      "för att återvända till menyn")
+                break
             item = input("Registrera varukod / Q för huvudmenyn: ").upper()
+
             if item != "Q":
                 for vara in lst_varor:
                     if vara.varukod == item:
@@ -125,14 +140,12 @@ class Order(list):
                         print(vara)
                         # spara till lista
                         reg_items.append(vara)
-
+            elif len(reg_items) != 0:  # förhindrar att tom order skapas
+                order = Order(reg_items)
+                lst_order.append(order)
+                print(order)
             else:
-                if len(reg_items) != 0:  # förhindrar att tom order skapas
-                    order = Order(reg_items)
-                    lst_order.append(order)
-                    print(order)
-                else:
-                    break
+                break
 
     def load_orders(lst_orders, pkl_file):
         '''Laddar ner sparade ordrar från angiven
@@ -159,5 +172,12 @@ class Order(list):
         med angivet ordernummer
         args: lista med objekt av typen Order'''
         i = int(input("Ordernummer: "))
-        print(lst_orders[i - 1])
+        if (i - 1) in lst_orders:
+            print(lst_orders[i - 1])
+        elif len(lst_orders) == 0:
+            print("Listan med ordrar är tom, tryck varsomhelst för att gå "
+                  "tillbaka till menyn")
+        else:
+            print("Ordern finns inte")
+            input("Tryck på 0 för att gå tilllbaka till menyn")
 

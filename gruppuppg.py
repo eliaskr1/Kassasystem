@@ -1,11 +1,11 @@
-
-
+import elias_klass
+import os
 #måste skapa tom lista först för att kunna lägga till saker med funktionen nyvara
 lst_varor = []
 
 # metod för att lägga till en ny vara
 def nyvara(namn, varukod, pris):
-    nyvara = vara(namn, varukod, pris)
+    nyvara = elias_klass.Vara(namn, varukod, pris)
     lst_varor.append(nyvara)
     return lst_varor
 
@@ -25,6 +25,10 @@ vara9 = nyvara("Mjukglass", "P09", 25)
 
 
 def meny(bredd):
+    if os.name == "nt":
+        os.system("cls")
+    elif os.name == "posix":
+        os.system("clear")
     print(f"| {'Café Python'} |".center(bredd))
     print("*"*bredd)
     toprint = ""
@@ -74,8 +78,9 @@ def register_items(lst_varor):
                     reg_items.append(vara)
         else:
             if len(reg_items) != 0: #förhindrar att tom order skapas
-                order = Order(reg_items)
+                order = elias_klass.Order(lst_varor, reg_items)
                 print(order)
                 huvudmeny()
+
 
 huvudmeny()
