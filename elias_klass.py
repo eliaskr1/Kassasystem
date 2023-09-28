@@ -54,7 +54,7 @@ class Vara:
     def delete_vara(lst_varor):
         x = -1
         found = False # För att felhantera felaktig varukod
-        sku = input("Ange varukod på Vara du vill ta bort > ").upper()
+        sku = input("Ange varukod på vara du vill ta bort > ").upper()
         for i in lst_varor:
             x += 1
             if sku == i.getvarukod():
