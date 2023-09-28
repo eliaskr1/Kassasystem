@@ -20,4 +20,12 @@ except FileNotFoundError:
 for i in lst_varor:
     print(i)
 
-vara.modify_vara(lst_varor)
+Vara.ny_vara(lst_varor)
+
+for i in lst_varor:
+    print(i)
+    
+Vara.delete_vara(lst_varor)
+
+for i in lst_varor:
+    print(i, "testtest")
