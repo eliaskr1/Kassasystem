@@ -9,19 +9,19 @@ def nyvara(namn, varukod, pris):
     lst_varor.append(nyvara)
     return lst_varor
 
-#varukod får inte starta på P, ger error
-vara1 = nyvara("Bryggkaffe", 100, 12)
-vara2 = nyvara("Cappuccino", 101, 30)
-vara3 = nyvara("Caffe latte", 102, 30)
 
-vara4 = nyvara("Billys pizza", 200, 30)
-vara5 = nyvara("Sallad", 201, 80)
-vara6 = nyvara("3 Pannkakor", 202, 50)
+vara1 = nyvara("Bryggkaffe", "P01", 12)
+vara2 = nyvara("Cappuccino", "P02", 30)
+vara3 = nyvara("Caffe latte", "P03", 30)
 
-vara7 = nyvara("Morotskaka", 300, 35)
+vara4 = nyvara("Billys pizza", "P04", 30)
+vara5 = nyvara("Sallad", "P05", 80)
+vara6 = nyvara("3 Pannkakor", "P06", 50)
+
+vara7 = nyvara("Morotskaka", "P07", 35)
 #får inte skriva 08, eller 008, får error, python gillar inte det
-vara8 = nyvara("Chokladboll", 301, 25)
-vara9 = nyvara("Mjukglass", 302, 25)
+vara8 = nyvara("Chokladboll", "P08", 25)
+vara9 = nyvara("Mjukglass", "P09", 25)
 
 
 def meny(bredd):
@@ -36,21 +36,24 @@ def meny(bredd):
     print(toprint)
     print("*" * bredd)
     print("-" * bredd)
-    print("A | Ny order")
-    print("B | Ta bort vara")
-    print("C | Retur")
+    print("1 | Ny order")
+    print("2 | Modifiera vara")
+    print("3 | Sök order")
     print("-" * bredd)
+    print("Ange val (1, 2, 3)")
+    return input("> ")
+
+
 
 #Huvudmeny med display och sortiment
 def huvudmeny():
-    meny(90)
     while True:
-        val = input("Ange val (A, B, C): ")
-        if val == "A":
+        val = meny(96)
+        if val == "1":
             reg_items = register_items(lst_varor)
-        elif val == "B":
-            print("Gå tillbaka till senaste order?") #Ska detta alt finnas?
-        elif val == "C":
+        elif val == "2":
+            print("Modifiera vara här")
+        elif val == "3":
             print("Sök i gamla ordrar med hjälp av ordernummer") ########### Alis del ###########
         else:
             print("Fel inmatning")
@@ -61,10 +64,10 @@ def register_items(lst_varor):
     reg_items = [] #tom lista för att spara aktuellt köp
     #evighetsloop tar en inmatning i taget istället för en hel order på samma gång.
     while True:
-        item = input("Registrera varukod / Q för huvudmenyn: ")
+        item = input("Registrera varukod / Q för huvudmenyn: ").casefold().capitalize()
         if item != "Q":
             for vara in lst_varor:
-                if vara.varukod == int(item):
+                if vara.varukod == item:
                     #utskrift av varan så att det är rätt
                     print(vara)
                     #spara till lista
@@ -74,6 +77,5 @@ def register_items(lst_varor):
                 order = Order(reg_items)
                 print(order)
                 huvudmeny()
-
 
 huvudmeny()
