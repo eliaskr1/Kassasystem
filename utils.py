@@ -1,6 +1,9 @@
 import pickle
 class Vara:
     def __init__(self, namn, varukod, pris: int):
+        if len(namn) > 20:
+            raise ValueError("Namnet är för långt. Max gräns 20.")
+
         self.namn = namn
         self.varukod = varukod
         self.pris = pris
@@ -31,40 +34,46 @@ class Vara:
         '''Ändrar namn och pris på "Vara" objekt i angiven lista med varor
         args: lista med objekt av typen Vara
         '''
-        found = False # För att felhantera felaktig varukod
-        sku = input("Ange varukod på Vara du vill ändra > ").upper()
-        for i in lst_varor:
-            if sku == i.getvarukod():
-                found = True
-                nytt_namn = input("Ange nytt namn till varan > ")
-                i.namn = nytt_namn
-                while True: # För att felhantera omvandling av pris till int
-                    try:
-                        nytt_pris_str = input("Ange nytt pris till Vara > ")
-                        nytt_pris = int(nytt_pris_str)
-                        i.pris = nytt_pris
-                        break  # Bryt loopen om omvandlingen till int lyckades
-                    except ValueError:
-                        print(nytt_pris_str, "är inte ett giltigt pris. Försök igen.")
-        if found == True:
-            print(sku, "har ändrats.")
-        else:
-            print(sku, "är inte en giltig varukod.")
-        
+        while True:
+            found = False  # För att felhantera felaktig varukod
+            sku = input("Ange varukod på Vara du vill ändra (0 för att återgå till menyn) > ").upper()
+
+            if sku == "0":
+                break  # Avsluta och återgå till menyn om användaren anger 0
+
+            for i in lst_varor:
+                if sku == i.getvarukod():
+                    found = True
+                    nytt_namn = input("Ange nytt namn till varan > ")
+                    i.namn = nytt_namn
+                    while True:  # För att felhantera omvandling av pris till int
+                        try:
+                            nytt_pris_str = input("Ange nytt pris till Vara > ")
+                            nytt_pris = int(nytt_pris_str)
+                            i.pris = nytt_pris
+                            break  # Bryt loopen om omvandlingen till int lyckades
+                        except ValueError:
+                            print(nytt_pris_str, "är inte ett giltigt pris. Försök igen.")
+            if found:
+                print(sku, "har ändrats.")
+            else:
+                print(sku, "är inte en giltig varukod.")
+
     def delete_vara(lst_varor):
-        x = -1
-        found = False # För att felhantera felaktig varukod
-        sku = input("Ange varukod på Vara du vill ta bort > ").upper()
-        for i in lst_varor:
-            x += 1
-            if sku == i.getvarukod():
-                found = True
-                del lst_varor[x]
-        if found == True:
-            print(sku, "har tagits bort.")
-        else:
-            print(sku, "är inte en giltig varukod")
-            
+        found = False  # För att felhantera felaktig varukod
+        while not found:
+            sku = input("Ange varukod på Vara du vill ta bort eller ange 0 för att återgå till menyn > ").upper()
+            if sku == "0":
+                break  # Avsluta och återgå till menyn om användaren anger 0
+            for i in lst_varor:
+                if sku == i.getvarukod():
+                    found = True
+                    lst_varor.remove(i)
+                    print(sku, "har tagits bort.")
+                    break
+            if not found:
+                print(sku, "är inte en giltig varukod. Försök igen.")
+
     def load_varor(lst_varor, pkl_file):
         '''Laddar lista med objekt av typen Vara till
         angiven lista från angiven pickle fil
@@ -158,6 +167,17 @@ class Order(list):
         '''Söker igenom angiven lista efter order
         med angivet ordernummer
         args: lista med objekt av typen Order'''
-        i = int(input("Ordernummer: "))
-        print(lst_orders[i - 1])
+        while True:
+            try:
+                i = int(input("Ordernummer (0 för att återgå till menyn): "))
+                if i == 0:
+                    break  # Avsluta loopen och gå tillbaka till menyn
+                elif i < 1 or i > len(lst_orders):
+                    print("Ogiltigt ordernummer! Försök igen.")
+                else:
+                    print(lst_orders[i - 1])
+            except ValueError: #Lösning för except error om man anger felaktig order nummer.
+                print("Ogiltig inmatning! Försök igen.")
+
+
 
