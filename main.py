@@ -25,22 +25,26 @@ while True:
     print("*" * bredd)
     print("-" * bredd)
     print("1 | Ny order")
-    print("2 | Modifiera vara")
-    print("3 | Lägg till vara")
-    print("4 | Ta bort vara")
-    print("5 | Sök order")
+    print("2 | Lägg till vara")
+    print("3 | Ta bort vara")
+    print("4 | Sök order")
+    print("5 | Avsluta program")
     print("-" * bredd)
-    print("Ange val (1, 2, 3, 4, 5)")
+    print("Ange val (1, 2, 3, 4)")
     val = input("> ")
     if val == "1":
         Order.register_items(lst_varor, lst_orders)
     elif val == "2":
-        Vara.modify_vara(lst_varor)
-    elif val == "3":
         Vara.ny_vara(lst_varor)
-    elif val == "4":
+    elif val == "3":
         Vara.delete_vara(lst_varor)
-    elif val == "5":
+    elif val == "4":
         Order.search_order(lst_orders)
+    elif val == "5":
+        print("Avslutar program...")
+        break
     else:
-        print("Fel inmatning, försök igen!")
+        input("Fel inmatning, tryck retur för att försöka igen!")
+
+Vara.save_varor(lst_varor, "picklesave.txt")
+Order.save_orders(lst_orders, "ordersave.txt")

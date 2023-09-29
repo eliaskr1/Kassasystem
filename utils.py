@@ -2,7 +2,7 @@ import pickle
 class Vara:
     def __init__(self, namn, varukod, pris: int):
         if pris < 0 or pris > 9999:
-            raise ValueError("Priset kan inte vara negativt.")
+            raise ValueError("Priset kan inte vara negativt eller över 9999 kr.")
         self.namn = namn
         self.varukod = varukod
         self.pris = pris
@@ -17,8 +17,16 @@ class Vara:
         '''Skapar nytt objekt av typen Vara och
         lägger till i angiven lista.
         args: lista'''
+        max_length = 23
         namn = input("Ange namn på varan: ")
         varukod = input("Ange varukod på varan: ").upper()
+        if len(namn) + len(varukod) > max_length: # Undviker för långa varukoder + varunamn
+            input(f"Namn får inte vara längre än {max_length} tecken. Tryck på retur för att försöka igen.")
+            return
+        for vara in lst_varor: # Undviker dubletter av varukod.
+            if vara.varukod == varukod:
+                input(f"Varukod {varukod} används redan för en annan vara. Tryck på retur för att försöka igen.")
+                return
         while True:
             try:
                 pris = int(input("Ange pris på varan: "))
@@ -28,6 +36,7 @@ class Vara:
                 print(pris, "är inte ett giltigt pris. Försök igen.")
         lst_varor.append(ny_vara)
         print(ny_vara.namn, "tillagd.")
+        input("Tryck på retur för att fortsätta...")
         
     def delete_vara(lst_varor):
         x = -1
@@ -40,13 +49,16 @@ class Vara:
                 del lst_varor[x]
         if found == True:
             print(sku, "har tagits bort.")
+            input("Tryck på retur för att fortsätta...")
         else:
-            print(sku, "är inte en giltig varukod")
+            print(sku, "är inte en giltig varukod.")
+            input("Tryck på retur för att fortsätta...")
             
     def load_varor(lst_varor, pkl_file):
         '''Laddar lista med objekt av typen Vara till
         angiven lista från angiven pickle fil
-        args: lista, pickle fil'''
+        args: lista, pickle fil
+        returns: lista med tillgängliga varor'''
         try:
             with open(pkl_file, "rb") as f:
                 lst_varor = pickle.load(f)
@@ -94,8 +106,9 @@ class Order(list):
         args: lista med varor, lista med ordrar'''
         reg_items = []  # tom lista för att spara aktuellt köp
         # evighetsloop tar en inmatning i taget istället för en hel order på samma gång.
+        print("Registrera varukod / Q för huvudmenyn: ")
         while True:
-            item = input("Registrera varukod / Q för huvudmenyn: ").upper()
+            item = input("> ").upper()
             if item != "Q":
                 for vara in lst_varor:
                     if vara.varukod == item:
@@ -103,6 +116,7 @@ class Order(list):
                         print(vara)
                         # spara till lista
                         reg_items.append(vara)
+                print("Total:", sum(vara.pris for vara in reg_items), "kr")
 
             else:
                 if len(reg_items) != 0:  # förhindrar att tom order skapas
@@ -117,7 +131,8 @@ class Order(list):
     def load_orders(lst_orders, pkl_file):
         '''Laddar ner sparade ordrar från angiven
         pickle fil till angiven lista.
-        args: lista med varor, pickle fil'''
+        args: lista med varor, pickle fil
+        returns: lista med tillgängliga ordrar'''
         try:
             with open(pkl_file, "rb") as g:
                 lst_orders = pickle.load(g)
@@ -138,8 +153,12 @@ class Order(list):
         '''Söker igenom angiven lista efter order
         med angivet ordernummer
         args: lista med objekt av typen Order'''
-        i = int(input("Ordernummer: "))
-        print(lst_orders[i - 1])
-
-
+        try:
+            i = int(input("Ordernummer: "))
+            print(lst_orders[i - 1])
+            input("")
+        except ValueError:
+            input("Ordernummer innehåller endast heltal.")
+        except IndexError:
+            input(f"Ordernummer: {i} hittades inte.")
 # Branch test
