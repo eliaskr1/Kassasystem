@@ -1,6 +1,12 @@
 from utils import *
 import os
 
+
+
+# Mergade ihop felsökningar
+# La till knapp för att gå ut programmet
+# Testade sparfunktion
+
 lst_varor = []
 lst_orders = []
 lst_varor = Vara.load_varor(lst_varor, "picklesave.txt")
@@ -29,6 +35,7 @@ while True:
     print("3 | Lägg till vara")
     print("4 | Ta bort vara")
     print("5 | Sök order")
+    print("0 | Stäng programmet")
     print("-" * bredd)
     print("Ange val (1, 2, 3, 4, 5)")
     val = input("> ")
@@ -42,5 +49,11 @@ while True:
         Vara.delete_vara(lst_varor)
     elif val == "5":
         Order.search_order(lst_orders)
+    elif val == "0":
+        break
     else:
         print("Fel inmatning, försök igen!")
+        input()
+
+Vara.save_varor(lst_varor, "picklesave.txt")
+Order.save_orders(lst_varor, "ordersave.txt")

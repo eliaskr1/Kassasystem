@@ -2,7 +2,7 @@ import pickle
 class Vara:
     def __init__(self, namn, varukod, pris: int):
         if pris < 0 or pris > 9999:
-            raise ValueError("Priset kan inte vara negativt.")
+            raise ValueError
         self.namn = namn
         self.varukod = varukod
         self.pris = pris
@@ -17,12 +17,16 @@ class Vara:
         '''Skapar nytt objekt av typen Vara och
         lägger till i angiven lista.
         args: lista'''
-        maxlength = 23
         while True:
             namn = input("Ange namn på varan: ")
+            if len(namn) > 23:
+                print(f"Namn får inte vara längre än 23 tecken")
+            else:
+                break
+        while True:
             varukod = input("Ange varukod på varan: ").upper()
-            if len(namn) >= maxlength or len(varukod) >= maxlength:
-                print(f"Namn får inte vara längre än {maxlength} tecken")
+            if len(varukod) > 3:
+                print(f"Namn får inte vara längre än 3 tecken")
             else:
                 break
         while True:
@@ -31,11 +35,7 @@ class Vara:
                 ny_vara = Vara(namn, varukod, pris)
                 break
             except ValueError:
-                print(f"{pris} är inte ett giltigt pris. Försök igen.")
-            if pris < 0 or pris > 9999:
                 print(pris, "är inte ett giltigt pris. Försök igen.")
-            else:
-                break
 
         ny_vara = Vara(namn, varukod, pris)
         lst_varor.append(ny_vara)
@@ -47,13 +47,13 @@ class Vara:
         '''
         while True:
             found = False  # För att felhantera felaktig varukod
-            sku = input("Ange varukod på Vara du vill ändra (0 för att återgå till menyn) > ").upper()
+            sku = input("Ange varukod på vara du vill ändra (0 för att återgå till menyn) > ")
 
             if sku == "0":
                 break  # Avsluta och återgå till menyn om användaren anger 0
 
             for i in lst_varor:
-                if sku == i.getvarukod():
+                if sku.upper() == i.getvarukod():
                     found = True
                     nytt_namn = input("Ange nytt namn till varan > ")
                     i.namn = nytt_namn
@@ -66,14 +66,14 @@ class Vara:
                         except ValueError:
                             print(nytt_pris_str, "är inte ett giltigt pris. Försök igen.")
             if found:
-                print(sku, "har ändrats.")
+                print(sku.upper(), "har ändrats.")
             else:
                 print(sku, "är inte en giltig varukod.")
 
     def delete_vara(lst_varor):
         found = False  # För att felhantera felaktig varukod
         while not found:
-            sku = input("Ange varukod på vara du vill ta bort eller ange 0 för att återgå till menyn > ").upper()
+            sku = input("Ange varukod på vara du vill ta bort (0 för att återgå till menyn) > ").upper()
             if sku == "0":
                 break  # Avsluta och återgå till menyn om användaren anger 0
             for i in lst_varor:
@@ -135,14 +135,12 @@ class Order(list):
         args: lista med varor, lista med ordrar'''
         reg_items = []  # tom lista för att spara aktuellt köp
         # evighetsloop tar en inmatning i taget istället för en hel order på samma gång.
-        while True:
-            if len(lst_varor) == 0:
-                # Undantagsfall ifall menynskulle vara helt tom fastnar i en loop annars
-                input("Det finns inga varor att lägga till, tryck varsomhelst "
-                      "för att återvända till menyn")
+        while True:            
+            if len(lst_varor) == 0: # Undantagsfall ifall cafémenyn skulle vara helt tom, fastnar i en loop annars               
+                input("Det finns inga varor att lägga till")
                 break
-            item = input("Registrera varukod / Q för huvudmenyn: ").upper()
 
+            item = input("Registrera varukod / Q för huvudmenyn: ").upper()
             if item != "Q":
                 for vara in lst_varor:
                     if vara.varukod == item:
@@ -196,8 +194,3 @@ class Order(list):
                     print(lst_orders[i - 1])
             except ValueError: #Lösning för except error om man anger felaktig order nummer.
                 print("Ogiltig inmatning! Försök igen.")
-
-
-
-
-# Branch test
