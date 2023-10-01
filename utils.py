@@ -115,7 +115,7 @@ class Order(list):
     '''
 
     def __init__(self, varor: list, lst_orders):
-        self.order_no = len(lst_orders)
+        self.order_no = len(lst_orders) + 1
         self.varor = varor
         self.tot_pris = sum(Vara.pris for Vara in varor)
 
@@ -191,6 +191,9 @@ class Order(list):
                 elif i < 1 or i > len(lst_orders):
                     print("Ogiltigt ordernummer! Försök igen.")
                 else:
-                    print(lst_orders[i - 1])
+                    # Ändrade så att den visar ordernumret man sökte på
+                    for order in lst_orders:
+                        if order.order_no == i:
+                            print(order)
             except ValueError: #Lösning för except error om man anger felaktig order nummer.
                 print("Ogiltig inmatning! Försök igen.")

@@ -1,18 +1,22 @@
 from utils import *
 import os
 
-
+# Att göra:
+# Går det att göra modify?
+# Ändra q till 0?
 
 # Mergade ihop felsökningar
 # La till knapp för att gå ut programmet
 # Testade sparfunktion
+# Fixade bugg i ordersök
+# Fixade till menyprinten
 
 lst_varor = []
 lst_orders = []
 lst_varor = Vara.load_varor(lst_varor, "picklesave.txt")
 lst_orders = Order.load_orders(lst_orders, "ordersave.txt")
 
-bredd = 96
+bredd = 99
 
 while True:
     if os.name == 'nt':
@@ -24,9 +28,9 @@ while True:
     toprint = ""
     for x in range(1, len(lst_varor) + 1):
         if x % 3 != 0:
-            toprint += f"│{lst_varor[x - 1]}".ljust(int(bredd / 3))
+            toprint += f"│{lst_varor[x - 1]}".ljust(int(bredd / 3) - 1) + "│"
         else:
-            toprint += f"│{lst_varor[x - 1]}│\n".rjust(int(bredd / 3))
+            toprint += f"│{lst_varor[x - 1]}".ljust(int(bredd / 3) - 1) + "│\n"
     print(toprint)
     print("*" * bredd)
     print("-" * bredd)
@@ -37,7 +41,7 @@ while True:
     print("5 | Sök order")
     print("0 | Stäng programmet")
     print("-" * bredd)
-    print("Ange val (1, 2, 3, 4, 5)")
+    print("Ange val (1, 2, 3, 4, 5, 0)")
     val = input("> ")
     if val == "1":
         Order.register_items(lst_varor, lst_orders)
@@ -56,4 +60,4 @@ while True:
         input()
 
 Vara.save_varor(lst_varor, "picklesave.txt")
-Order.save_orders(lst_varor, "ordersave.txt")
+Order.save_orders(lst_orders, "ordersave.txt")
