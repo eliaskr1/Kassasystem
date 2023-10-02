@@ -40,7 +40,6 @@ while True:
     print("4 | Sök order")
     print("5 | Avsluta program")
     print("-" * bredd)
-    print("Ange val (1, 2, 3, 4)")
     val = input("> ")
     if val == "1":
         Order.register_items(lst_varor, lst_orders)
@@ -58,4 +57,3 @@ while True:
 
 Vara.save_varor(lst_varor, "picklesave.txt")
 Order.save_orders(lst_orders, "ordersave.txt")
-

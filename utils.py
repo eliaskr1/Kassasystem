@@ -1,4 +1,6 @@
 import pickle
+
+
 class Vara:
     def __init__(self, namn, varukod, pris: int):
         if pris < 0 or pris > 9999:
@@ -12,7 +14,7 @@ class Vara:
 
     def __str__(self):
         return f" ({self.varukod}) {self.namn}: {self.pris} kr"
-    
+
     def ny_vara(lst_varor):
         '''Skapar nytt objekt av typen Vara och
         lägger till i angiven lista.
@@ -26,19 +28,21 @@ class Vara:
                 break
             except ValueError:
                 print(pris, "är inte ett giltigt pris. Försök igen.")
-            for vara in lst_varor: # Undviker dubletter av varukod.
+            for vara in lst_varor:  # Undviker dubletter av varukod.
                 if vara.varukod == varukod:
-                    input(f"Varukod {varukod} används redan för en annan vara. Tryck på retur för att försöka igen.")
+                    input(
+                        f"Varukod {varukod} används redan för en annan vara. Tryck på retur för att försöka igen.")
                     return
         ny_vara = Vara(namn, varukod, pris)
         lst_varor.append(ny_vara)
         print(ny_vara.namn, "tillagd.")
         input("Tryck på retur för att fortsätta...")
-        
+
     def delete_vara(lst_varor):
         found = False  # För att felhantera felaktig varukod
         while not found:
-            sku = input("Ange varukod på vara du vill ta bort (0 för att återgå till menyn) > ").upper()
+            sku = input(
+                "Ange varukod på vara du vill ta bort (0 för att återgå till menyn) > ").upper()
             if sku == "0":
                 break  # Avsluta och återgå till menyn om användaren anger 0
             for i in lst_varor:
@@ -46,11 +50,12 @@ class Vara:
                     found = True
                     lst_varor.remove(i)
                     print(sku, "har tagits bort.")
-                input("Tryck på retur för att fortsätta...")                    
-                    break
+                input("Tryck på retur för att fortsätta...")
+                break
             if not found:
                 print(sku, "är inte en giltig varukod. Försök igen.")
                 input("Tryck på retur för att fortsätta...")
+
     def load_varor(lst_varor, pkl_file):
         '''Laddar lista med objekt av typen Vara till
         angiven lista från angiven pickle fil
@@ -64,15 +69,14 @@ class Vara:
         except FileNotFoundError:
             lst_varor = []
         return lst_varor
-        
+
     def save_varor(lst_varor, pkl_file):
         '''Sparar lista med objekt av typen Vara
         till angiven pickle fil.
         args: lista med varor, pickle fil'''
         with open(pkl_file, "wb") as f:
             pickle.dump(lst_varor, f)
-        
-            
+
 
 class Order(list):
     '''
@@ -102,8 +106,9 @@ class Order(list):
         args: lista med varor, lista med ordrar'''
         reg_items = []  # tom lista för att spara aktuellt köp
         # evighetsloop tar en inmatning i taget istället för en hel order på samma gång.
-        while True:            
-            if len(lst_varor) == 0: # Undantagsfall ifall cafémenyn skulle vara helt tom, fastnar i en loop annars               
+        while True:
+            # Undantagsfall ifall cafémenyn skulle vara helt tom, fastnar i en loop annars
+            if len(lst_varor) == 0:
                 input("Det finns inga varor att lägga till")
                 break
 
@@ -122,10 +127,10 @@ class Order(list):
                     order = Order(reg_items, lst_order)
                     lst_order.append(order)
                     print(order)
-                    input("") # Pausar för utskrift av kvitto.
+                    input("")  # Pausar för utskrift av kvitto.
                     break
                 else:
-                    break # Förhindrar evighetsloop om man inte har några varor att sälja
+                    break  # Förhindrar evighetsloop om man inte har några varor att sälja
 
     def load_orders(lst_orders, pkl_file):
         '''Laddar ner sparade ordrar från angiven
@@ -140,14 +145,14 @@ class Order(list):
         except FileNotFoundError:
             lst_orders = []
         return lst_orders
-    
+
     def save_orders(lst_orders, pkl_file):
         '''Sparar ner angiven lista med ordrar till
         angiven pickle fil.
         args: lista med objekt Vara, pickle fil'''
         with open(pkl_file, "wb") as g:
             pickle.dump(lst_orders, g)
-            
+
     def search_order(lst_orders):
         '''Söker igenom angiven lista efter order
         med angivet ordernummer
@@ -164,5 +169,5 @@ class Order(list):
                     for order in lst_orders:
                         if order.order_no == i:
                             print(order)
-            except ValueError: #Lösning för except error om man anger felaktig order nummer.
+            except ValueError:  # Lösning för except error om man anger felaktig order nummer.
                 print("Ogiltig inmatning! Försök igen.")
