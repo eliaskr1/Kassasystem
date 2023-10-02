@@ -17,18 +17,8 @@ class Vara:
         '''Skapar nytt objekt av typen Vara och
         lägger till i angiven lista.
         args: lista'''
-        while True:
-            namn = input("Ange namn på varan: ")
-            if len(namn) > 23:
-                print(f"Namn får inte vara längre än 23 tecken")
-            else:
-                break
-        while True:
-            varukod = input("Ange varukod på varan: ").upper()
-            if len(varukod) > 3:
-                print(f"Namn får inte vara längre än 3 tecken")
-            else:
-                break
+        namn = input("Ange namn på varan: ")
+        varukod = input("Ange varukod på varan: ").upper()
         while True:
             try:
                 pris = int(input("Ange pris på varan: "))
@@ -36,40 +26,15 @@ class Vara:
                 break
             except ValueError:
                 print(pris, "är inte ett giltigt pris. Försök igen.")
-
+            for vara in lst_varor: # Undviker dubletter av varukod.
+                if vara.varukod == varukod:
+                    input(f"Varukod {varukod} används redan för en annan vara. Tryck på retur för att försöka igen.")
+                    return
         ny_vara = Vara(namn, varukod, pris)
         lst_varor.append(ny_vara)
         print(ny_vara.namn, "tillagd.")
-
-    def modify_vara(lst_varor):
-        '''Ändrar namn och pris på "Vara" objekt i angiven lista med varor
-        args: lista med objekt av typen Vara
-        '''
-        while True:
-            found = False  # För att felhantera felaktig varukod
-            sku = input("Ange varukod på vara du vill ändra (0 för att återgå till menyn) > ")
-
-            if sku == "0":
-                break  # Avsluta och återgå till menyn om användaren anger 0
-
-            for i in lst_varor:
-                if sku.upper() == i.getvarukod():
-                    found = True
-                    nytt_namn = input("Ange nytt namn till varan > ")
-                    i.namn = nytt_namn
-                    while True:  # För att felhantera omvandling av pris till int
-                        try:
-                            nytt_pris_str = input("Ange nytt pris till Vara > ")
-                            nytt_pris = int(nytt_pris_str)
-                            i.pris = nytt_pris
-                            break  # Bryt loopen om omvandlingen till int lyckades
-                        except ValueError:
-                            print(nytt_pris_str, "är inte ett giltigt pris. Försök igen.")
-            if found:
-                print(sku.upper(), "har ändrats.")
-            else:
-                print(sku, "är inte en giltig varukod.")
-
+        input("Tryck på retur för att fortsätta...")
+        
     def delete_vara(lst_varor):
         found = False  # För att felhantera felaktig varukod
         while not found:
@@ -81,14 +46,16 @@ class Vara:
                     found = True
                     lst_varor.remove(i)
                     print(sku, "har tagits bort.")
+                input("Tryck på retur för att fortsätta...")                    
                     break
             if not found:
                 print(sku, "är inte en giltig varukod. Försök igen.")
-
+                input("Tryck på retur för att fortsätta...")
     def load_varor(lst_varor, pkl_file):
         '''Laddar lista med objekt av typen Vara till
         angiven lista från angiven pickle fil
-        args: lista, pickle fil'''
+        args: lista, pickle fil
+        returns: lista med tillgängliga varor'''
         try:
             with open(pkl_file, "rb") as f:
                 lst_varor = pickle.load(f)
@@ -148,6 +115,7 @@ class Order(list):
                         print(vara)
                         # spara till lista
                         reg_items.append(vara)
+                print("Total:", sum(vara.pris for vara in reg_items), "kr")
 
             else:
                 if len(reg_items) != 0:  # förhindrar att tom order skapas
@@ -162,7 +130,8 @@ class Order(list):
     def load_orders(lst_orders, pkl_file):
         '''Laddar ner sparade ordrar från angiven
         pickle fil till angiven lista.
-        args: lista med varor, pickle fil'''
+        args: lista med varor, pickle fil
+        returns: lista med tillgängliga ordrar'''
         try:
             with open(pkl_file, "rb") as g:
                 lst_orders = pickle.load(g)
